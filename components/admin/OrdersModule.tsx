@@ -212,7 +212,7 @@ export default function OrdersModule() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
         <div className="flex-1 w-full overflow-hidden">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter uppercase break-words w-full">Order Ledger</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter uppercase break-words w-full">Order Records</h1>
           <p className="text-zinc-400 mt-2 text-sm sm:text-base md:text-lg font-light tracking-wide">{activeTab === 'All' ? 'Showing all incoming orders.' : `Currently viewing: ${activeTab}`}</p>
         </div>
         <button onClick={fetchOrders} className="flex items-center justify-center gap-3 px-8 py-4 bg-white/10 border border-white/20 rounded-2xl text-xs md:text-sm font-black text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-xl w-full md:w-auto shrink-0">

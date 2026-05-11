@@ -8,6 +8,7 @@ import { supabase } from '../../lib/supabase';
 import OrdersModule from '../../components/admin/OrdersModule';
 import InventoryModule from '../../components/admin/InventoryModule';
 import ReviewsModule from '../../components/admin/ReviewsModule';
+import MarketingModule from '../../components/admin/MarketingModule';
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,7 +16,8 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
   
-  const [activeModule, setActiveModule] = useState<'Orders' | 'Inventory' | 'Reviews'>('Orders');
+  // ✨ ADDED 'Marketing' TO THE ACTIVE MODULE STATE ✨
+  const [activeModule, setActiveModule] = useState<'Orders' | 'Inventory' | 'Reviews' | 'Marketing'>('Orders');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -74,6 +76,10 @@ export default function AdminDashboard() {
           <div className="flex-1 overflow-y-auto p-8 space-y-4">
             <button onClick={() => setActiveModule('Orders')} className={`w-full text-left px-6 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeModule === 'Orders' ? 'bg-purple-600/10 border border-purple-500/30 text-purple-400' : 'text-zinc-500 hover:text-white border border-transparent'}`}>Orders</button>
             <button onClick={() => setActiveModule('Inventory')} className={`w-full text-left px-6 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeModule === 'Inventory' ? 'bg-purple-600/10 border border-purple-500/30 text-purple-400' : 'text-zinc-500 hover:text-white border border-transparent'}`}>Inventory</button>
+            
+            {/* ✨ NEW MARKETING BUTTON ✨ */}
+            <button onClick={() => setActiveModule('Marketing')} className={`w-full text-left px-6 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeModule === 'Marketing' ? 'bg-purple-600/10 border border-purple-500/30 text-purple-400' : 'text-zinc-500 hover:text-white border border-transparent'}`}>Marketing</button>
+            
             <button onClick={() => setActiveModule('Reviews')} className={`w-full text-left px-6 py-5 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeModule === 'Reviews' ? 'bg-purple-600/10 border border-purple-500/30 text-purple-400' : 'text-zinc-500 hover:text-white border border-transparent'}`}>Reviews</button>
             <Link href="/admin/chat" className="block w-full px-6 py-5 text-zinc-500 hover:text-white font-bold text-sm uppercase tracking-widest transition-all">Customer Chat</Link>
           </div>
@@ -84,10 +90,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* ✨ DYNAMIC MODULE LOADER ✨ */}
-{/* ✨ DYNAMIC MODULE LOADER ✨ */}
-<div className="flex-1 p-6 md:p-8 lg:p-12">
+        <div className="flex-1 p-6 md:p-8 lg:p-12">
           {activeModule === 'Orders' && <OrdersModule />}
           {activeModule === 'Inventory' && <InventoryModule />}
+          {activeModule === 'Marketing' && <MarketingModule />}
           {activeModule === 'Reviews' && <ReviewsModule />}
         </div>
 

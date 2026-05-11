@@ -8,9 +8,19 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [contactMenuOpen, setContactMenuOpen] = useState(false);
+  const [shopMenuOpen, setShopMenuOpen] = useState(false); // ✨ NEW STATE FOR SHOP MENU ✨
   
   const router = useRouter();
   const pathname = usePathname();
+
+  // ✨ YOUR EXACT CATEGORIES ✨
+  const categories = [
+    { name: 'Stanley Tumblers', query: 'Stanley+tumblers' },
+    { name: 'Beauty & Skincare', query: 'Beauty+products' },
+    { name: 'Premium Prayer Mats', query: 'Prayer+Mat' },
+    { name: 'Mini Fans', query: 'MiNi+Fan' },
+    { name: 'Home Decor', query: 'Decoration' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,10 +77,27 @@ export default function Header() {
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
             
-            <Link href="/market" className="relative text-base xl:text-lg font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors group">
-              Shop
-              <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+            {/* ✨ NEW SHOP DROPDOWN ✨ */}
+            <div className="relative group py-2">
+              <Link href="/market" className="relative text-base xl:text-lg font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 group-hover:text-white">
+                Shop
+                <svg className="w-4 h-4 text-zinc-500 group-hover:text-white transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+              </Link>
+              
+              <div className="absolute top-full left-0 w-full h-4"></div>
+
+              <div className="absolute top-full left-0 mt-2 w-64 bg-zinc-950/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col overflow-hidden translate-y-2 group-hover:translate-y-0">
+                <Link href="/market" className="px-5 py-4 text-sm font-black uppercase tracking-widest text-white bg-white/5 hover:bg-purple-600 transition-colors flex justify-between items-center">
+                  Shop All Assets <span className="text-lg leading-none">→</span>
+                </Link>
+                {categories.map((cat, idx) => (
+                  <Link key={idx} href={`/market?category=${cat.query}`} className="px-5 py-4 text-xs font-bold uppercase tracking-widest text-zinc-300 hover:bg-white/10 hover:text-white transition-colors border-t border-white/5">
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             <Link href="/reviews" className="relative text-base xl:text-lg font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors group">
               Feedback
@@ -109,7 +136,7 @@ export default function Header() {
               Admin
               <span className="absolute -bottom-2 left-4 xl:left-6 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
-                        <Link href="/developer" className="relative text-base xl:text-lg font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors group">
+            <Link href="/developer" className="relative text-base xl:text-lg font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors group">
               Dev's Message
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -139,16 +166,34 @@ export default function Header() {
         </div>
 
         {/* --- MOBILE NAVIGATION DROPDOWN --- */}
-        <div className={`xl:hidden absolute top-full left-0 w-full bg-zinc-950/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-500 overflow-hidden ${mobileMenuOpen ? 'max-h-[800px] border-opacity-100' : 'max-h-0 border-opacity-0'}`}>
+        <div className={`xl:hidden absolute top-full left-0 w-full bg-zinc-950/95 backdrop-blur-2xl border-b border-white/10 transition-all duration-500 overflow-hidden overflow-y-auto custom-scrollbar ${mobileMenuOpen ? 'max-h-[85vh] border-opacity-100' : 'max-h-0 border-opacity-0'}`}>
           <nav className="flex flex-col px-8 py-6 space-y-6">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors flex items-center justify-between">
               <span>Home</span><span className="text-purple-500">→</span>
             </Link>
             <div className="w-full h-px bg-white/5"></div>
             
-            <Link href="/market" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors flex items-center justify-between">
-              <span>Shop</span><span className="text-purple-400">→</span>
-            </Link>
+            {/* ✨ MOBILE SHOP ACCORDION ✨ */}
+            <div>
+              <button 
+                onClick={() => setShopMenuOpen(!shopMenuOpen)}
+                className="w-full text-2xl font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors flex items-center justify-between"
+              >
+                <span>Shop</span>
+                <svg className={`w-6 h-6 text-zinc-500 transition-transform duration-300 ${shopMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              
+              <div className={`flex flex-col gap-3 overflow-hidden transition-all duration-300 border-l border-white/10 ml-3 ${shopMenuOpen ? 'max-h-96 mt-4' : 'max-h-0'}`}>
+                <Link href="/market" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2 text-lg font-black uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors">
+                  Shop All Assets
+                </Link>
+                {categories.map((cat, idx) => (
+                  <Link key={idx} href={`/market?category=${cat.query}`} onClick={() => setMobileMenuOpen(false)} className="px-4 py-2 text-sm font-bold uppercase tracking-widest text-zinc-400 hover:text-white transition-colors">
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
             <div className="w-full h-px bg-white/5"></div>
 
             <Link href="/reviews" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold uppercase tracking-widest text-zinc-300 hover:text-white transition-colors flex items-center justify-between">
